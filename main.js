@@ -1,5 +1,13 @@
-//blackjack functionality.
 
+document.addEventListener('DOMContentLoaded', () => {
+    let startBtn = document.querySelector('#Start');
+    let Player = document.querySelector('#User');
+    let Dealer = document.querySelector('#Dealer');
+
+    startBtn.addEventListener('Click', Game.startGame());
+})
+
+//blackjack functionality
 function shuffle(array) {
     let currentIndex = array.length, randomIndex;
 
@@ -79,10 +87,7 @@ class Player {
 }
 
 
-const testPlayer = new Player('test');
-testPlayer.hand = ['10H', '9S', 'AH', 'AS']
 
-console.log(testPlayer.evaluateHand())
 //game class
 class Game {
     constructor(playerName) {
@@ -96,29 +101,43 @@ class Game {
     }
 
     startGame() {
-        this.dealer.HitDealer();
-        this.dealer.HitDealer();
+        this.user.hand = [];
+        this.dealer.hand = [];
+        this.HitDealer();
+        this.HitDealer();
+        let dealerHand = document.querySelector('dealerDeck');
+        dealerHand = this.dealer.hand[0];
+        this.Hit();
+        this.Hit();
     }
 
     Hit() {
         this.user.hand.push(this.deck.pop());
         this.userScore = this.user.evaluateHand()
-        if (this.userScore == 21) Blackjack();
-        if (this.userScore > 21) Bust();
+        if (this.userScore == 21) this.Blackjack();
+        if (this.userScore > 21) this.Bust();
+        let currentUserHand = document.querySelector('userDeck')
+        currentUserHand.textContent = "User Hand:" + this.user.hand;
+
+        let currentUserScore = document.querySelector('#currentScore')
+        currentUserScore.textContent = this.userScore;
+
     }
 
     Blackjack() {
         console.log('blackjack!')
+        this.userMoney += this.userBet;
+
     }
 
     HitDealer() {
         this.dealer.hand.push(this.deck.pop());
         this.dealerScore = this.dealer.evaluateHand()
-        //if (this.dealerScore == 21) blackjack();
-        //if (this.dealerScore > 21) bust();
+
     }
 
     Bust() {
+        console.log('bust!')
         this.userMoney -= this.userBet;
         this.user.hand = [];
         this.dealer.hand = [];
@@ -127,18 +146,17 @@ class Game {
 
     Stand() {
 
-
+        //dealer gameplay. very complex.
         while (this.dealerScore < 17) {
-            this.dealer.HitDealer();
+            this.HitDealer();
         }
 
-        //finish dealer gameplay
 
-
-        //compare scores
-
-
-        //payouts
+        //compare scores, payouts
+        if (this.userScore > this.dealerScore) {
+            console.log("user win!")
+            this.userMoney += this.userBet;
+        }
 
     }
 
@@ -172,19 +190,18 @@ function newDeck() {
 
 
 const testGame = new Game('testUser');
-testGame.Hit();
-testGame.Hit();
-testGame.Hit();
-testGame.Hit();
-testGame.Hit();
+testGame.startGame();
+console.log(testGame.dealer.hand)
 console.log(testGame.user.hand)
 
 
 
-//hit function
+
+
 
 
 
 //cards
 
 //new game
+
