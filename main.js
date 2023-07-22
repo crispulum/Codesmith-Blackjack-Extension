@@ -88,20 +88,59 @@ class Game {
     constructor(playerName) {
         this.deck = newDeck()
         this.user = new Player(playerName);
+        this.userScore = 0;
+        this.userMoney = 100;
+        this.userBet = 0;
         this.dealer = new Player('Dealer')
-        //this.dealer = new Dealer;
+        this.dealerScore = 0;
+    }
+
+    startGame() {
+        this.dealer.HitDealer();
+        this.dealer.HitDealer();
     }
 
     Hit() {
         this.user.hand.push(this.deck.pop());
+        this.userScore = this.user.evaluateHand()
+        if (this.userScore == 21) Blackjack();
+        if (this.userScore > 21) Bust();
+    }
+
+    Blackjack() {
+        console.log('blackjack!')
+    }
+
+    HitDealer() {
+        this.dealer.hand.push(this.deck.pop());
+        this.dealerScore = this.dealer.evaluateHand()
+        //if (this.dealerScore == 21) blackjack();
+        //if (this.dealerScore > 21) bust();
+    }
+
+    Bust() {
+        this.userMoney -= this.userBet;
+        this.user.hand = [];
+        this.dealer.hand = [];
+
     }
 
     Stand() {
 
 
+        while (this.dealerScore < 17) {
+            this.dealer.HitDealer();
+        }
+
+        //finish dealer gameplay
+
+
+        //compare scores
+
+
+        //payouts
+
     }
-
-
 
 
 }
@@ -132,21 +171,18 @@ function newDeck() {
 
 
 
-/* const testGame = new Game('testUser');
+const testGame = new Game('testUser');
 testGame.Hit();
 testGame.Hit();
 testGame.Hit();
 testGame.Hit();
 testGame.Hit();
 console.log(testGame.user.hand)
- */
+
 
 
 //hit function
 
-//player done w hand function (stand)
-
-//check value w hand function
 
 
 //cards
